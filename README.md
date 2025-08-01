@@ -12,7 +12,7 @@ These results underscore HRM’s potential as a transformative advancement towar
 
 ### Prerequisites ⚙️
 
-Ensure PyTorch and CUDA are installed. The repo needs CUDA extensions to be built. If not present, run the following commands:
+Ensure PyTorch is installed with the appropriate hardware support. The repo needs CUDA or Intel GPU extensions to be built. Follow the instructions below based on your GPU type:
 
 ```bash
 # Install CUDA 12.6
@@ -42,6 +42,24 @@ python setup.py install
 
 For Ampere or earlier GPUs, install FlashAttention 2
 
+### For Intel GPUs 🖥️
+
+```bash
+# Install Intel Extension for PyTorch
+pip install intel-extension-for-pytorch
+
+# Set environment variables for Intel optimizations (Linux/Mac)
+export DNNL_MAX_CPU_ISA=AVX512_CORE
+
+# For Windows PowerShell:
+# $env:DNNL_MAX_CPU_ISA="AVX512_CORE"
+
+# Note: FlashAttention may not be available for Intel GPUs
+# The model will automatically use standard attention mechanisms
+```
+
+### For NVIDIA GPUs (FlashAttention)
+
 ```bash
 pip3 install flash-attn
 ```
@@ -54,10 +72,22 @@ pip install -r requirements.txt
 
 ## W&B Integration 📈
 
-This project uses [Weights & Biases](https://wandb.ai/) for experiment tracking and metric visualization. Ensure you're logged in:
+This project uses [Weights & Biases](https://wandb.ai/) for experiment tracking and metric visualization. 
+
+### Setup W&B Authentication
 
 ```bash
+# Method 1: Interactive login
 wandb login
+
+# Method 2: Set API key as environment variable (recommended for automation)
+# Linux/Mac:
+export WANDB_API_KEY=your_api_key_here
+
+# Windows PowerShell:
+$env:WANDB_API_KEY="your_api_key_here"
+# Or permanently:
+[Environment]::SetEnvironmentVariable("WANDB_API_KEY", "your_api_key_here", "User")
 ```
 
 ## Run Experiments
